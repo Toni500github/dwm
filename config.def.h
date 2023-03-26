@@ -29,10 +29,12 @@ static const char *colors[][3]      = {
 };
 
 static const char *const autostart[] = {
-	"nm-applet", NULL,
+	//"nm-applet", NULL,
 	"slstatus",  NULL,
+  "picom",  "-b", NULL,
 	"sh", "-c", "/home/toni/.fehbg", NULL,
-	//"/home/toni/Backup/build/dwmblocks/dwmblocks", NULL,
+  "sh", "-c", "xset r rate 270 45 &", NULL,
+	//"dwmblocks", NULL,
 	NULL /* terminate */
 };
 
@@ -63,7 +65,7 @@ static const Layout layouts[] = {
 };
 
 /* key definitions */
-#define MODKEY Mod1Mask
+#define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
