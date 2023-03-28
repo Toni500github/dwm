@@ -15,7 +15,7 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 #define ICONSIZE 16
 #define ICONSPACING 5
-static const char *fonts[]          = { "monospace:size=10", "Iosevka:style:medium:size=12", "JetBrainsMono Nerd Font Mono:style:medium:size=12" };
+static const char *fonts[]          = { "monospace:size=10", "fontawesome:size=12", "Iosevka:style:medium:size=12", "JetBrainsMono Nerd Font Mono:style:medium:size=12" };
 static const char dmenufont[]       = "monospace:size=10";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
