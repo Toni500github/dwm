@@ -15,7 +15,7 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 #define ICONSIZE 16
 #define ICONSPACING 5
-static const char *fonts[]          = { "monospace:size=10", "fontawesome:size=12", "Iosevka:style:medium:size=12", "JetBrainsMono Nerd Font Mono:style:medium:size=12" };
+static const char *fonts[]          = { "monospace:size=10", "FontAwesome:style=Regular:pixelsize=15", "Iosevka:style:medium:size=12", "JetBrainsMono Nerd Font Mono:style:medium:size=12" };
 static const char dmenufont[]       = "monospace:size=10";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
@@ -120,6 +120,7 @@ static const Key keys[] = {
 	//{ MODKEY|ShiftMask,             XK_q,      	exitdwm,		{0}	},
 	{ MODKEY|ShiftMask,             XK_q,      	spawn,          {.v = (const char*[]){ "sysact", NULL } } },
 	{ MODKEY|ShiftMask,             XK_r,      	self_restart,   {0} },
+  { MODKEY|ShiftMask,             XK_s,       spawn,          {.v = (const char*[]){ "flameshot", "gui", NULL} } },
 
 	{ 0, XF86XK_AudioMute,						spawn,			{.v = (const char*[]){"pamixer", "-t",   NULL } } },
 	{ 0, XF86XK_AudioRaiseVolume,				spawn,			{.v = (const char*[]){"pamixer", "-i", "2", NULL } } },
