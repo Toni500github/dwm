@@ -2,6 +2,7 @@
 #include <X11/XF86keysym.h>
 #include "selfrestart.c"
 #include "exitdwm.c"
+#include "movestack.c"
 
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
@@ -102,9 +103,11 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_i,      	incnmaster,     {.i = +1 } },
 	{ MODKEY,                       XK_h,      	setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      	setmfact,       {.f = +0.05} },
+  { MODKEY|ShiftMask,             XK_j,       movestack,      {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_k,       movestack,      {.i = -1 } },
 	{ MODKEY,                       XK_Return, 	zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    	view,           {0} },
-	{ MODKEY,             			XK_q,      	killclient,     {0} },
+	{ MODKEY,             			    XK_q,      	killclient,     {0} },
 	{ MODKEY,                       XK_t,      	setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      	setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      	setlayout,      {.v = &layouts[2]} },
