@@ -10,7 +10,7 @@ static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows sel
 static const unsigned int systrayonleft = 0;    /* 0: systray in the right corner, >0: systray on left of status text */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
-static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
+static const int swallowfloating    = 1;        /* 1 means swallow floating windows by default */
 static const int showsystray        = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
@@ -19,17 +19,21 @@ static const char buttonbar[]       = " |";
 #define ICONSPACING 5
 static const char font[]          	= "monospace:size=10";
 static const char dmenufont[]       = "monospace:size=10";
-static const char *fonts[]          = { font, "FontAwesome:style=Regular:pixelsize=15", "Iosevka:style:medium:size=12", "JetBrainsMono Nerd Font Mono:style:medium:size=12" };
+static const char *fonts[]          = { font, "Liberation Mono:pixelsize=12:antialias=true:autohint=true", "FontAwesome:style=Regular:pixelsize=15", "Iosevka:style:medium:size=12", "JetBrainsMono Nerd Font Mono:style:medium:size=12" };
 static char normbgcolor[]           = "#222222";
 static char normbordercolor[]       = "#444444";
 static char normfgcolor[]           = "#bbbbbb";
 static char selfgcolor[]            = "#eeeeee";
 static char selbordercolor[]        = "#005577";
 static char selbgcolor[]            = "#005577";
+static char titlebgcolor[]          = "#3A4253";
+static char titlefgcolor[]          = "#9FBCDB";
+
 static char *colors[][3] = {
-       /*               fg           bg           border   */
-       [SchemeNorm] = { normfgcolor, normbgcolor, normbordercolor },
-       [SchemeSel]  = { selfgcolor,  selbgcolor,  selbordercolor  },
+       /*               fg                  bg               border   */
+       [SchemeNorm] = { normfgcolor,      normbgcolor,     normbordercolor },
+       [SchemeSel]  = { selfgcolor,       selbgcolor,      selbordercolor  },
+       [SchemeTitle]= { titlefgcolor,     titlebgcolor,    normbgcolor     }
 };
 
 
@@ -46,6 +50,11 @@ static const char *const autostart[] = {
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
+static const unsigned int ulinepad	= 5;	/* horizontal padding between the underline and tag */
+static const unsigned int ulinestroke	= 2;	/* thickness / height of the underline */
+static const unsigned int ulinevoffset	= 2;	/* how far above the bottom of the bar the line should appear */
+static const int ulineall 		= 0;	/* 1 to show underline on all tags, 0 for just the active ones */
+
 static const Rule rules[] = {
 	/* xprop(1):
 	 *	WM_CLASS(STRING) = instance, class
@@ -53,8 +62,8 @@ static const Rule rules[] = {
 	 */
 	/* class               instance  title                      tags mask  isfloating  isterminal  noswallow  monitor */
 	{ "Gimp",              NULL,     NULL,                        0,         1,          0,           0,        -1 },
-	{ "Firefox",           NULL,     NULL,         /*title*/      1 << 8,    0,          0,          -1,        -1 },
-	{ "xfce4-terminal",    "Xfce4-terminal",     "Terminal",      0,         0,          1,           0,        -1 },
+	{ "Firefox",           NULL,     NULL,                        1 << 8,    0,          0,          -1,        -1 },
+	{ "St",                NULL,     NULL,                        0,         0,          1,           0,        -1 },
 	{ NULL,                NULL,     "Event Tester",              0,         0,          0,           1,        -1 }, /* xev */
 };
 
@@ -77,7 +86,7 @@ ResourcePref resources[] = {
   { "color14",            STRING,   &selbordercolor},
   { "color0",             STRING,   &normbgcolor},
   { "color12",            STRING,   &normfgcolor},
-  { "color7",             STRING,   &selfgcolor},
+  { "color19",            STRING,   &selfgcolor},
   { "color0",             STRING,   &selbgcolor},
   { "font",               STRING,   &font },
   { "dmenufont",          STRING,   &dmenufont },
@@ -110,7 +119,7 @@ ResourcePref resources[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbordercolor, "-sf", selfgcolor, NULL };
-static const char *termcmd[]  = { "i3-sensible-terminal", NULL };
+static const char *termcmd[]  = { "st", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        	function        argument */
@@ -171,10 +180,15 @@ static const Key keys[] = {
 	{ MODKEY|ControlMask|ShiftMask, XK_Down,   moveresizeedge, {.v = "B"} },
 	{ MODKEY|ControlMask|ShiftMask, XK_Left,   moveresizeedge, {.v = "L"} },
 	{ MODKEY|ControlMask|ShiftMask, XK_Right,  moveresizeedge, {.v = "R"} },
+  
+  { 0, XF86XK_AudioMute,		                spawn,		SHCMD("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle; kill -35 $(pidof slbar)") },
+	{ 0, XF86XK_AudioRaiseVolume,	            spawn,		SHCMD("wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%+; kill -35 $(pidof slbar)") },
+	{ 0, XF86XK_AudioLowerVolume,	            spawn,		SHCMD("wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%-; kill -35 $(pidof slbar)") },
 
-	{ 0, XF86XK_AudioMute,						          spawn,			    {.v = (const char*[]){"pamixer", "-t",   NULL } } },
+	/*{ 0, XF86XK_AudioMute,						          spawn,			    {.v = (const char*[]){"pamixer", "-t",   NULL } } },
 	{ 0, XF86XK_AudioRaiseVolume,				        spawn,			    {.v = (const char*[]){"pamixer", "-i", "2", NULL } } },
 	{ 0, XF86XK_AudioLowerVolume,				        spawn,			    {.v = (const char*[]){"pamixer", "-d", "2", NULL } } },
+  */
 };
 
 /* button definitions */
