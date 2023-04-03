@@ -4,7 +4,7 @@
 #include "movestack.c"
 
 /* appearance */
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
+static const unsigned int borderpx  = 0;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft = 0;    /* 0: systray in the right corner, >0: systray on left of status text */
@@ -38,8 +38,9 @@ static char *colors[][3] = {
 
 
 static const char *const autostart[] = {
-	//"nm-applet", NULL,
-	"slstatus",  NULL,
+	"nm-applet", NULL,
+  "slbar",    NULL,
+	//"slstatus",  NULL,
   "picom",  "-b", NULL,
 	"sh", "-c", "/home/toni/.fehbg", NULL,
   "sh", "-c", "xset r rate 270 45 &", NULL,
@@ -181,9 +182,9 @@ static const Key keys[] = {
 	{ MODKEY|ControlMask|ShiftMask, XK_Left,   moveresizeedge, {.v = "L"} },
 	{ MODKEY|ControlMask|ShiftMask, XK_Right,  moveresizeedge, {.v = "R"} },
   
-  { 0, XF86XK_AudioMute,		                spawn,		SHCMD("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle; kill -35 $(pidof slbar)") },
-	{ 0, XF86XK_AudioRaiseVolume,	            spawn,		SHCMD("wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%+; kill -35 $(pidof slbar)") },
-	{ 0, XF86XK_AudioLowerVolume,	            spawn,		SHCMD("wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%-; kill -35 $(pidof slbar)") },
+  { 0, XF86XK_AudioMute,		                spawn,		SHCMD("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle; kill -35 $(pidof dwmblocks)") },
+	{ 0, XF86XK_AudioRaiseVolume,	            spawn,		SHCMD("wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%+; kill -35 $(pidof dwmblocks)") },
+	{ 0, XF86XK_AudioLowerVolume,	            spawn,		SHCMD("wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%-; kill -35 $(pidof dwmblocks)") },
 
 	/*{ 0, XF86XK_AudioMute,						          spawn,			    {.v = (const char*[]){"pamixer", "-t",   NULL } } },
 	{ 0, XF86XK_AudioRaiseVolume,				        spawn,			    {.v = (const char*[]){"pamixer", "-i", "2", NULL } } },
