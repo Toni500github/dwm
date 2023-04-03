@@ -6,6 +6,7 @@
 /* appearance */
 static const unsigned int borderpx  = 0;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
+static const unsigned int gappx     = 5;        /* gaps between windows */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft = 0;    /* 0: systray in the right corner, >0: systray on left of status text */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
@@ -39,8 +40,8 @@ static char *colors[][3] = {
 
 static const char *const autostart[] = {
 	"nm-applet", NULL,
-  "slbar",    NULL,
-	//"slstatus",  NULL,
+  //"slbar",    NULL,
+	"slstatus",  NULL,
   "picom",  "-b", NULL,
 	"sh", "-c", "/home/toni/.fehbg", NULL,
   "sh", "-c", "xset r rate 270 45 &", NULL,
@@ -53,7 +54,7 @@ static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
 static const unsigned int ulinepad	= 5;	/* horizontal padding between the underline and tag */
 static const unsigned int ulinestroke	= 2;	/* thickness / height of the underline */
-static const unsigned int ulinevoffset	= 2;	/* how far above the bottom of the bar the line should appear */
+static const unsigned int ulinevoffset	= 1;	/* how far above the bottom of the bar the line should appear */
 static const int ulineall 		= 0;	/* 1 to show underline on all tags, 0 for just the active ones */
 
 static const Rule rules[] = {
@@ -69,7 +70,7 @@ static const Rule rules[] = {
 };
 
 /* layout(s) */
-static float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
+static float mfact     = 0.05; /* factor of master area size [0.05..0.95] */
 static int nmaster     = 1;    /* number of clients in master area */
 static int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
@@ -164,7 +165,7 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_q,      	spawn,          {.v = (const char*[]){ "sysact", NULL } } },
 	{ MODKEY|ShiftMask,             XK_r,      	quit,           {1} }, // it will self restart 
   { MODKEY|ShiftMask,             XK_s,       spawn,          {.v = (const char*[]){ "flameshot", "gui", NULL} } },
-  
+
   { MODKEY,                       XK_Down,   moveresize,     {.v = "0x 25y 0w 0h" } },
 	{ MODKEY,                       XK_Up,     moveresize,     {.v = "0x -25y 0w 0h" } },
 	{ MODKEY,                       XK_Right,  moveresize,     {.v = "25x 0y 0w 0h" } },
@@ -181,23 +182,19 @@ static const Key keys[] = {
 	{ MODKEY|ControlMask|ShiftMask, XK_Down,   moveresizeedge, {.v = "B"} },
 	{ MODKEY|ControlMask|ShiftMask, XK_Left,   moveresizeedge, {.v = "L"} },
 	{ MODKEY|ControlMask|ShiftMask, XK_Right,  moveresizeedge, {.v = "R"} },
-  
-  { 0, XF86XK_AudioMute,		                spawn,		SHCMD("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle; kill -35 $(pidof dwmblocks)") },
-	{ 0, XF86XK_AudioRaiseVolume,	            spawn,		SHCMD("wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%+; kill -35 $(pidof dwmblocks)") },
-	{ 0, XF86XK_AudioLowerVolume,	            spawn,		SHCMD("wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%-; kill -35 $(pidof dwmblocks)") },
 
-	/*{ 0, XF86XK_AudioMute,						          spawn,			    {.v = (const char*[]){"pamixer", "-t",   NULL } } },
+	{ 0, XF86XK_AudioMute,						          spawn,			    {.v = (const char*[]){"pamixer", "-t",   NULL } } },
 	{ 0, XF86XK_AudioRaiseVolume,				        spawn,			    {.v = (const char*[]){"pamixer", "-i", "2", NULL } } },
 	{ 0, XF86XK_AudioLowerVolume,				        spawn,			    {.v = (const char*[]){"pamixer", "-d", "2", NULL } } },
-  */
+
 };
 
 /* button definitions */
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static const Button buttons[] = {
 	/* click                event mask      button          function        argument */
-	{ ClkButton,		        0,		          Button1,	      spawn,		      {.v = dmenucmd } },
-  { ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
+	{ ClkButton, 		0,	        Button1,	spawn,		 {.v = termcmd } },
+  	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
 	//{ ClkStatusText,        0,              Button1,        sigdwmblocks,   {.i = 1} },
