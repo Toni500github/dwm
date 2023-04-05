@@ -2,9 +2,13 @@
 #include <X11/XF86keysym.h>
 #include "exitdwm.c"
 #include "movestack.c"
+#include "layouts.c"
+#include "gaplessgrid.c"
+#include "nrowgrid.c"
+#define FORCE_VSPLIT 1
 
 /* appearance */
-static const unsigned int borderpx  = 0;        /* border pixel of windows */
+static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const unsigned int gappx     = 5;        /* gaps between windows */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
@@ -20,6 +24,7 @@ static const char buttonbar[]       = " |";
 #define ICONSPACING 5
 static const char font[]          	= "monospace:size=10";
 static const char dmenufont[]       = "monospace:size=10";
+//static const char *fonts[]	        = { "MesloLGS Nerd Font:size=11" };
 static const char *fonts[]          = { font, "Liberation Mono:pixelsize=12:antialias=true:autohint=true", "FontAwesome:style=Regular:pixelsize=15", "Iosevka:style:medium:size=12", "JetBrainsMono Nerd Font Mono:style:medium:size=12" };
 static char normbgcolor[]           = "#222222";
 static char normbordercolor[]       = "#444444";
@@ -34,18 +39,18 @@ static char *colors[][3] = {
        /*               fg                  bg               border   */
        [SchemeNorm] = { normfgcolor,      normbgcolor,     normbordercolor },
        [SchemeSel]  = { selfgcolor,       selbgcolor,      selbordercolor  },
-       [SchemeTitle]= { titlefgcolor,     titlebgcolor,    normbgcolor     }
+       [SchemeTitle]= { titlefgcolor,     normbgcolor,    normbgcolor     }
 };
 
 
 static const char *const autostart[] = {
 	"nm-applet", NULL,
-  //"slbar",    NULL,
-	"slstatus",  NULL,
+//  "slbar",    NULL,
+//	"slstatus",  NULL,
   "picom",  "-b", NULL,
 	"sh", "-c", "/home/toni/.fehbg", NULL,
   "sh", "-c", "xset r rate 270 45 &", NULL,
-	//"dwmblocks", NULL,
+	"dwmblocks", NULL,
 	NULL /* terminate */
 };
 
@@ -70,16 +75,19 @@ static const Rule rules[] = {
 };
 
 /* layout(s) */
-static float mfact     = 0.05; /* factor of master area size [0.05..0.95] */
+static float mfact     = 0.50; /* factor of master area size [0.05..0.95] */
 static int nmaster     = 1;    /* number of clients in master area */
 static int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "",      tile },    /* first entry is default */
-	{ "><>",      NULL },    /* no layout function means floating behavior */
-	{ "[M]",      monocle },
+	{ " ",      tile },    /* first entry is default */
+	{ " ",      NULL },    /* no layout function means floating behavior */
+	{ " ",      monocle },
+	{ "HHH",      grid },
+  	{ "###",      gaplessgrid },
+	{ ":::",      nrowgrid },
 };
 
 /* Xresources preferences to load at startup */
@@ -135,23 +143,27 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_8,                      	7)
 	TAGKEYS(                        XK_9,                      	8)
 
-	{ MODKEY, 						XK_w,		spawn, 			{.v = (const char*[]){ "brave-browser", NULL } } },
+	{ MODKEY, 			XK_w,		spawn, 		{.v = (const char*[]){ "brave-browser", NULL } } },
 	{ MODKEY,                       XK_d,      	spawn,          {.v = dmenucmd } },
-	{ MODKEY|ShiftMask,				XK_d,		spawn,			SHCMD("~/.config/rofi/launchers/type-4/launcher.sh") },
-	{ MODKEY,             			XK_Return, 	spawn,          {.v = termcmd } },
+	{ MODKEY|ShiftMask,		XK_d,		spawn,		SHCMD("~/.config/rofi/launchers/type-4/launcher.sh") },
+	{ MODKEY,             		XK_Return, 	spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      	togglebar,      {0} },
 	{ MODKEY,                       XK_j,      	focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      	focusstack,     {.i = -1 } },
 	{ MODKEY,                       XK_i,      	incnmaster,     {.i = +1 } },
-	{ MODKEY,                       XK_h,      	setmfact,       {.f = -0.05} },
-	{ MODKEY,                       XK_l,      	setmfact,       {.f = +0.05} },
-  { MODKEY|ShiftMask,             XK_j,       movestack,      {.i = +1 } },
+	{ MODKEY,                       XK_h,      	setmfact,       {.f = -0.02} },
+	{ MODKEY,                       XK_l,      	setmfact,       {.f = +0.02} },
+  	{ MODKEY|ShiftMask,             XK_j,       	movestack,      {.i = +1 } },
+  	{ MODKEY|ShiftMask,             XK_k,       	movestack,      {.i = -1 } },
 	{ MODKEY,                       XK_Return, 	zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    	view,           {0} },
-	{ MODKEY,             			    XK_q,      	killclient,     {0} },
+	{ MODKEY,             		XK_q,      	killclient,     {0} },
 	{ MODKEY,                       XK_t,      	setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      	setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      	setlayout,      {.v = &layouts[2]} },
+  	{ MODKEY,                       XK_g,       	setlayout,      {.v = &layouts[3]} },
+  	{ MODKEY|ShiftMask,             XK_g,       	setlayout,      {.v = &layouts[4]} },
+  	{ MODKEY,                       XK_n,       	setlayout,      {.v = &layouts[5]} },
 	{ MODKEY,                       XK_space,  	setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  	togglefloating, {0} },
 	{ MODKEY|ShiftMask,             XK_f,      	togglefullscr,  {0} },
@@ -161,32 +173,35 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_period, 	focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  	tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, 	tagmon,         {.i = +1 } },
-	//{ MODKEY|ShiftMask,             XK_q,      	exitdwm,		{0}	},
-	{ MODKEY|ShiftMask,             XK_q,      	spawn,          {.v = (const char*[]){ "sysact", NULL } } },
+/*	{ MODKEY|ShiftMask,           	XK_q,      	exitdwm,	{0}	},*/
+	{ MODKEY|ShiftMask,             XK_q,      	spawn,          SHCMD("sysact") },
 	{ MODKEY|ShiftMask,             XK_r,      	quit,           {1} }, // it will self restart 
-  { MODKEY|ShiftMask,             XK_s,       spawn,          {.v = (const char*[]){ "flameshot", "gui", NULL} } },
+  	{ MODKEY|ShiftMask,             XK_s,       	spawn,          {.v = (const char*[]){ "flameshot", "gui", NULL} } },
 
-  { MODKEY,                       XK_Down,   moveresize,     {.v = "0x 25y 0w 0h" } },
-	{ MODKEY,                       XK_Up,     moveresize,     {.v = "0x -25y 0w 0h" } },
-	{ MODKEY,                       XK_Right,  moveresize,     {.v = "25x 0y 0w 0h" } },
-	{ MODKEY,                       XK_Left,   moveresize,     {.v = "-25x 0y 0w 0h" } },
-	{ MODKEY|ShiftMask,             XK_Down,   moveresize,     {.v = "0x 0y 0w 25h" } },
-	{ MODKEY|ShiftMask,             XK_Up,     moveresize,     {.v = "0x 0y 0w -25h" } },
-	{ MODKEY|ShiftMask,             XK_Right,  moveresize,     {.v = "0x 0y 25w 0h" } },
-	{ MODKEY|ShiftMask,             XK_Left,   moveresize,     {.v = "0x 0y -25w 0h" } },
-	{ MODKEY|ControlMask,           XK_Up,     moveresizeedge, {.v = "t"} },
-	{ MODKEY|ControlMask,           XK_Down,   moveresizeedge, {.v = "b"} },
-	{ MODKEY|ControlMask,           XK_Left,   moveresizeedge, {.v = "l"} },
-	{ MODKEY|ControlMask,           XK_Right,  moveresizeedge, {.v = "r"} },
-	{ MODKEY|ControlMask|ShiftMask, XK_Up,     moveresizeedge, {.v = "T"} },
-	{ MODKEY|ControlMask|ShiftMask, XK_Down,   moveresizeedge, {.v = "B"} },
-	{ MODKEY|ControlMask|ShiftMask, XK_Left,   moveresizeedge, {.v = "L"} },
-	{ MODKEY|ControlMask|ShiftMask, XK_Right,  moveresizeedge, {.v = "R"} },
+  	{ MODKEY,                       XK_Down,   	moveresize,     {.v = "0x 25y 0w 0h" } },
+	{ MODKEY,                       XK_Up,     	moveresize,     {.v = "0x -25y 0w 0h" } },
+	{ MODKEY,                       XK_Right,  	moveresize,     {.v = "25x 0y 0w 0h" } },
+	{ MODKEY,                       XK_Left,   	moveresize,     {.v = "-25x 0y 0w 0h" } },
+	{ MODKEY|ShiftMask,             XK_Down,   	moveresize,     {.v = "0x 0y 0w 25h" } },
+	{ MODKEY|ShiftMask,             XK_Up,     	moveresize,     {.v = "0x 0y 0w -25h" } },
+	{ MODKEY|ShiftMask,             XK_Right,  	moveresize,     {.v = "0x 0y 25w 0h" } },
+	{ MODKEY|ShiftMask,             XK_Left,   	moveresize,     {.v = "0x 0y -25w 0h" } },
+	{ MODKEY|ControlMask,           XK_Up,     	moveresizeedge, {.v = "t"} },
+	{ MODKEY|ControlMask,           XK_Down,   	moveresizeedge, {.v = "b"} },
+	{ MODKEY|ControlMask,           XK_Left,   	moveresizeedge, {.v = "l"} },
+	{ MODKEY|ControlMask,           XK_Right,  	moveresizeedge, {.v = "r"} },
+	{ MODKEY|ControlMask|ShiftMask, XK_Up,     	moveresizeedge, {.v = "T"} },
+	{ MODKEY|ControlMask|ShiftMask, XK_Down,   	moveresizeedge, {.v = "B"} },
+	{ MODKEY|ControlMask|ShiftMask, XK_Left,   	moveresizeedge, {.v = "L"} },
+	{ MODKEY|ControlMask|ShiftMask, XK_Right,  	moveresizeedge, {.v = "R"} },
 
-	{ 0, XF86XK_AudioMute,						          spawn,			    {.v = (const char*[]){"pamixer", "-t",   NULL } } },
-	{ 0, XF86XK_AudioRaiseVolume,				        spawn,			    {.v = (const char*[]){"pamixer", "-i", "2", NULL } } },
-	{ 0, XF86XK_AudioLowerVolume,				        spawn,			    {.v = (const char*[]){"pamixer", "-d", "2", NULL } } },
-
+	{ 0, XF86XK_AudioMute,		                spawn,		SHCMD("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle; kill -35 $(pidof dwmblocks)") },
+	{ 0, XF86XK_AudioRaiseVolume,	            spawn,		SHCMD("wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%+; kill -35 $(pidof dwmblocks)") },
+	{ 0, XF86XK_AudioLowerVolume,	            spawn,		SHCMD("wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%-; kill -35 $(pidof dwmblocks)") },
+	/*{ 0, XF86XK_AudioMute,			   	spawn,	   	{.v = (const char*[]){ "pamixer", "-t",   NULL } } },
+	{ 0, XF86XK_AudioRaiseVolume,		   	spawn,	   	{.v = (const char*[]){ "pamixer", "-i", "2", NULL } } },
+	{ 0, XF86XK_AudioLowerVolume,		   	spawn,	   	{.v = (const char*[]){ "pamixer", "-d", "2", NULL } } },
+	*/
 };
 
 /* button definitions */
