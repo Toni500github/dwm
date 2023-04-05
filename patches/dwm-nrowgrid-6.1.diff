@@ -1,0 +1,77 @@
+Author: Chris Noxz <chris@noxz.tech>
+
+diff -upN dwm-6.1/config.def.h dwm-nrowgrid-6.1/config.def.h
+--- dwm-6.1/config.def.h	2015-11-08 23:11:48.000000000 +0100
++++ dwm-nrowgrid-6.1/config.def.h	2018-10-01 10:44:05.631382842 +0200
+@@ -34,11 +34,15 @@ static const float mfact     = 0.55; /*
+ static const int nmaster     = 1;    /* number of clients in master area */
+ static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
+ 
++#define FORCE_VSPLIT 1
++#include "nrowgrid.c"
++
+ static const Layout layouts[] = {
+ 	/* symbol     arrange function */
+ 	{ "[]=",      tile },    /* first entry is default */
+ 	{ "><>",      NULL },    /* no layout function means floating behavior */
+ 	{ "[M]",      monocle },
++	{ "###",      nrowgrid },
+ };
+ 
+ /* key definitions */
+diff -upN dwm-6.1/nrowgrid.c dwm-nrowgrid-6.1/nrowgrid.c
+--- dwm-6.1/nrowgrid.c	1970-01-01 01:00:00.000000000 +0100
++++ dwm-nrowgrid-6.1/nrowgrid.c	2018-10-01 10:44:27.741263063 +0200
+@@ -0,0 +1,52 @@
++void
++nrowgrid(Monitor *m)
++{
++    unsigned int n = 0, i = 0, ri = 0, ci = 0;  /* counters */
++    unsigned int cx, cy, cw, ch;                /* client geometry */
++    unsigned int uw = 0, uh = 0, uc = 0;        /* utilization trackers */
++    unsigned int cols, rows = m->nmaster + 1;
++    Client *c;
++
++    /* count clients */
++    for (c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
++
++    /* nothing to do here */
++    if (n == 0)
++        return;
++
++    /* force 2 clients to always split vertically */
++    if (FORCE_VSPLIT && n == 2)
++        rows = 1;
++
++    /* never allow empty rows */
++    if (n < rows)
++        rows = n;
++
++    /* define first row */
++    cols = n / rows;
++    uc = cols;
++    cy = m->wy;
++    ch = m->wh / rows;
++    uh = ch;
++
++    for (c = nexttiled(m->clients); c; c = nexttiled(c->next), i++, ci++) {
++        if (ci == cols) {
++            uw = 0;
++            ci = 0;
++            ri++;
++
++            /* next row */
++            cols = (n - uc) / (rows - ri);
++            uc += cols;
++            cy = m->wy + uh;
++            ch = (m->wh - uh) / (rows - ri);
++            uh += ch;
++        }
++
++        cx = m->wx + uw;
++        cw = (m->ww - uw) / (cols - ci);
++        uw += cw;
++
++        resize(c, cx, cy, cw - 2 * c->bw, ch - 2 * c->bw, 0);
++    }
++}
