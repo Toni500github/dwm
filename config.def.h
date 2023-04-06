@@ -45,12 +45,12 @@ static char *colors[][3] = {
 
 static const char *const autostart[] = {
 	"nm-applet", NULL,
-//  "slbar",    NULL,
+	"slbar",    NULL,
 //	"slstatus",  NULL,
   "picom",  "-b", NULL,
 	"sh", "-c", "/home/toni/.fehbg", NULL,
   "sh", "-c", "xset r rate 270 45 &", NULL,
-	"dwmblocks", NULL,
+//	"dwmblocks", NULL,
 	NULL /* terminate */
 };
 
@@ -126,6 +126,8 @@ ResourcePref resources[] = {
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
+#define STATUSBAR "slbar"
+
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbordercolor, "-sf", selfgcolor, NULL };
@@ -195,9 +197,9 @@ static const Key keys[] = {
 	{ MODKEY|ControlMask|ShiftMask, XK_Left,   	moveresizeedge, {.v = "L"} },
 	{ MODKEY|ControlMask|ShiftMask, XK_Right,  	moveresizeedge, {.v = "R"} },
 
-	{ 0, XF86XK_AudioMute,		                spawn,		SHCMD("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle; kill -35 $(pidof dwmblocks)") },
-	{ 0, XF86XK_AudioRaiseVolume,	            spawn,		SHCMD("wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%+; kill -35 $(pidof dwmblocks)") },
-	{ 0, XF86XK_AudioLowerVolume,	            spawn,		SHCMD("wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%-; kill -35 $(pidof dwmblocks)") },
+	{ 0, XF86XK_AudioMute,		                spawn,		SHCMD("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle; kill -35 $(pidof slbar)") },
+	{ 0, XF86XK_AudioRaiseVolume,	            spawn,		SHCMD("wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%+; kill -35 $(pidof slbar)") },
+	{ 0, XF86XK_AudioLowerVolume,	            spawn,		SHCMD("wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%-; kill -35 $(pidof slbar)") },
 	/*{ 0, XF86XK_AudioMute,			   	spawn,	   	{.v = (const char*[]){ "pamixer", "-t",   NULL } } },
 	{ 0, XF86XK_AudioRaiseVolume,		   	spawn,	   	{.v = (const char*[]){ "pamixer", "-i", "2", NULL } } },
 	{ 0, XF86XK_AudioLowerVolume,		   	spawn,	   	{.v = (const char*[]){ "pamixer", "-d", "2", NULL } } },
@@ -208,13 +210,13 @@ static const Key keys[] = {
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static const Button buttons[] = {
 	/* click                event mask      button          function        argument */
-	{ ClkButton, 		0,	        Button1,	spawn,		 {.v = termcmd } },
+	{ ClkButton, 		0,	        Button1,	spawn,		{.v = termcmd } },
   	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
-	//{ ClkStatusText,        0,              Button1,        sigdwmblocks,   {.i = 1} },
-	//{ ClkStatusText,        0,              Button2,        sigdwmblocks,   {.i = 2} },
-	//{ ClkStatusText,        0,              Button3,        sigdwmblocks,   {.i = 3} },
+/*	{ ClkStatusText,        0,              Button1,        sigstatusbar,   {.i = 1} },
+	{ ClkStatusText,        0,              Button2,        sigstatusbar,   {.i = 2} },
+	{ ClkStatusText,        0,              Button3,        sigstatusbar,   {.i = 3} }, */
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
