@@ -48,9 +48,10 @@ static const char *const autostart[] = {
 	"nm-applet", NULL,
 	"slbar",    NULL,
 //	"slstatus",  NULL,
-  "picom",  "-b", NULL,
+  	"picom",  "-b", NULL,
+	"sh", "/home/toni/.conky/awesome-conky/launch.sh", NULL,
 	"sh", "-c", "/home/toni/.fehbg", NULL,
-  "sh", "-c", "xset r rate 270 45 &", NULL,
+  	"sh", "-c", "xset r rate 270 45 &", NULL,
 //	"dwmblocks", NULL,
 	NULL /* terminate */
 };
