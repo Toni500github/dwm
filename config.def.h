@@ -9,7 +9,7 @@
 
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
-static const unsigned int snap      = 32;       /* snap pixel */
+static const unsigned int snap      = 2;       /* snap pixel */
 static const unsigned int gappx     = 5;        /* gaps between windows */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft = 0;    /* 0: systray in the right corner, >0: systray on left of status text */
@@ -89,6 +89,8 @@ static const Layout layouts[] = {
 	{ "HHH",      grid },
   	{ "###",      gaplessgrid },
 	{ ":::",      nrowgrid },
+	{ "|M|",      centeredmaster },
+        { ">M>",      centeredfloatingmaster },
 };
 
 /* Xresources preferences to load at startup */
@@ -158,7 +160,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_l,      	setmfact,       {.f = +0.02} },
   	{ MODKEY|ShiftMask,             XK_j,       	movestack,      {.i = +1 } },
   	{ MODKEY|ShiftMask,             XK_k,       	movestack,      {.i = -1 } },
-	{ MODKEY,                       XK_Return, 	zoom,           {0} },
+	{ MODKEY,                       XK_z, 		zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    	view,           {0} },
 	{ MODKEY,             		XK_q,      	killclient,     {0} },
 	{ MODKEY,                       XK_t,      	setlayout,      {.v = &layouts[0]} },
@@ -167,10 +169,15 @@ static const Key keys[] = {
   	{ MODKEY,                       XK_g,       	setlayout,      {.v = &layouts[3]} },
   	{ MODKEY|ShiftMask,             XK_g,       	setlayout,      {.v = &layouts[4]} },
   	{ MODKEY,                       XK_n,       	setlayout,      {.v = &layouts[5]} },
+	{ MODKEY,                       XK_u,      	setlayout,      {.v = &layouts[6]} },
+        { MODKEY,                       XK_o,      	setlayout,      {.v = &layouts[7]} },
 	{ MODKEY,                       XK_space,  	setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  	togglefloating, {0} },
 	{ MODKEY|ShiftMask,             XK_f,      	togglefullscr,  {0} },
  	{ MODKEY|ShiftMask,             XK_i,      	togglermaster,  {0} },
+	{ MODKEY,                       XK_minus,  	setgaps,        {.i = -1 } },
+	{ MODKEY,                       XK_equal,  	setgaps,        {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_equal,  	setgaps,        {.i = 0  } },
 	{ MODKEY,                       XK_0,      	view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      	tag,            {.ui = ~0 } },
 	{ MODKEY,                       XK_comma,  	focusmon,       {.i = -1 } },
