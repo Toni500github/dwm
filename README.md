@@ -33,6 +33,7 @@ Patches
 * movestack-20211115-a786211
 * nrowgrid-6.1
 * preserveonrestart-6.3
+* pertag-20200914-61bb8b2.diff
 * resizecorners-6.2
 * restartsig-20180523-6.2
 * rmaster-6.2
@@ -45,3 +46,4 @@ Patches
 * vertical-horizontal-i3like
 * winicon-6.3-v2.1
 * xresources-20210827-138b405
+
