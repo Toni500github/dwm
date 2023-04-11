@@ -94,31 +94,6 @@ static const Layout layouts[] = {
         { ">M>",      centeredfloatingmaster },
 };
 
-/* Xresources preferences to load at startup */
-ResourcePref resources[] = {
-  { "color4",             STRING,   &normbordercolor},
-  { "color14",            STRING,   &selbordercolor},
-  { "color0",             STRING,   &normbgcolor},
-  { "color12",            STRING,   &normfgcolor},
-  { "color19",            STRING,   &selfgcolor},
-  { "color0",             STRING,   &selbgcolor},
-  { "font",               STRING,   &font },
-  { "dmenufont",          STRING,   &dmenufont },
-  { "normbgcolor",        STRING,   &normbgcolor },
-  { "normbordercolor",    STRING,   &normbordercolor },
-  { "normfgcolor",        STRING,   &normfgcolor },
-  { "selbgcolor",         STRING,   &selbgcolor },
-  { "selbordercolor",     STRING,   &selbordercolor },
-  { "selfgcolor",         STRING,   &selfgcolor },
-  { "borderpx",           INTEGER,  &borderpx },
-  { "snap",               INTEGER,  &snap },
-  { "showbar",            INTEGER,  &showbar },
-  { "topbar",             INTEGER,  &topbar },
-  { "nmaster",            INTEGER,  &nmaster },
-  { "resizehints",        INTEGER,  &resizehints },
-  { "mfact",              FLOAT,    &mfact },
-};
-
 /* key definitions */
 #define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
