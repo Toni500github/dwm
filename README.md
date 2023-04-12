@@ -20,30 +20,29 @@ In order to build dwm you need the Xlib header files.
 
 Patches
 ------------
-* actualfullscreen-20191112-cb3f58a
-* alwayscenter-20200625-f04cac6
-* centeredmaster-6.1
-* cool-autostart-6.2
-* cyclelayouts-20180524-6.2
-* exitmenu-6.3
-* fixborders-6.2
-* gaplessgrid-20160731-56a31dc
-* gridmode-20170909-ceac8c9
-* moveresize-20221210-7ac106c
-* movestack-20211115-a786211
-* nrowgrid-6.1
-* preserveonrestart-6.3
+* actualfullscreen-20191112-cb3f58a.diff
+* alwayscenter-20200625-f04cac6.diff
+* centeredmaster-6.1.diff
+* cool-autostart-6.2.diff
+* cyclelayouts-20180524-6.2.diff
+* exitmenu-6.3.diff
+* fixborders-6.2.diff
+* gaplessgrid-20160731-56a31dc.diff
+* gridmode-20170909-ceac8c9.diff
+* moveresize-20221210-7ac106c.diff
+* movestack-20211115-a786211.diff
+* nrowgrid-6.1.diff
 * pertag-20200914-61bb8b2.diff
-* resizecorners-6.2
-* restartsig-20180523-6.2
-* rmaster-6.2
-* statusbutton-20180524-c8e9479
-* steam-6.2
-* swallow-6.3
-* systray-6.4
-* titlecolor-20210815-ed3ab6b4
-* underlinetags-6.2
-* vertical-horizontal-i3like
-* winicon-6.3-v2.1
-* xresources-20210827-138b405
-
+* preserveonrestart-6.3.diff
+* removeborder-20220626-d3f93c7.diff
+* resizecorners-6.2.diff
+* restartsig-20180523-6.2.diff
+* rmaster-6.2.diff
+* status2d-systray-6.4.diff
+* statusbutton-20180524-c8e9479.diff
+* steam-6.2.diff
+* swallow-6.3.diff
+* titlecolor-20210815-ed3ab6b4.diff
+* underlinetags-6.2.diff
+* vertical-horizontal-i3like.diff
+* winicon-6.3-v2.1.diff
