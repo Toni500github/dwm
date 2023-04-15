@@ -8,7 +8,7 @@
 #define FORCE_VSPLIT 1
 
 /* appearance */
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
+static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const unsigned int snap      = 2;       /* snap pixel */
 static const unsigned int gappx     = 3;        /* gaps between windows */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
@@ -31,23 +31,21 @@ static char normbgcolor[]           = "#222222";
 static char normbordercolor[]       = "#444444";
 static char normfgcolor[]           = "#bbbbbb";
 static char selfgcolor[]            = "#eeeeee";
-static char selbordercolor[]        = "#005577";
+static char selbordercolor[]        = "#24a4d6";
 static char selbgcolor[]            = "#005577";
-static char titlebgcolor[]          = "#3A4253";
-static char titlefgcolor[]          = "#9FBCDB";
 
 static char *colors[][3] = {
        /*               fg                  bg               border   */
        [SchemeNorm] = { normfgcolor,      normbgcolor,     normbordercolor },
        [SchemeSel]  = { selfgcolor,       selbgcolor,      selbordercolor  },
-       [SchemeTitle]= { titlefgcolor,     normbgcolor,    normbgcolor     },
+       [SchemeTitle]= { selfgcolor,     selbgcolor,    normbgcolor     },
 };
 
 
 static const char *const autostart[] = {
 	"nm-applet", NULL,
-	"slbar",    NULL,
-//	"slstatus",  NULL,
+//	"slbar",    NULL,
+	"slstatus",  NULL,
   	"picom",  "-b", NULL,
 	"sh", "/home/toni/.conky/awesome-conky/launch.sh", NULL,
 	"sh", "-c", "/home/toni/.fehbg", NULL,
@@ -107,9 +105,15 @@ static const Layout layouts[] = {
 
 #define STATUSBAR "slbar"
 
+/* commands spawned when clicking statusbar, the mouse button pressed is exported as BUTTON */
+static const StatusCmd statuscmds[] = {
+       { "notify-send Mouse$BUTTON", 1 },
+};
+static const char *statuscmd[] = { "/bin/sh", "-c", NULL, NULL };
+
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbordercolor, "-sf", selfgcolor, "-nhb", normbgcolor, "-shb", selbordercolor, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbordercolor, "-sf", selfgcolor, NULL };
 static const char *termcmd[]  = { "st", NULL };
 
 static const Key keys[] = {
@@ -126,6 +130,7 @@ static const Key keys[] = {
 
 	{ MODKEY, 			XK_w,		spawn, 		{.v = (const char*[]){ "brave-browser", NULL } } },
 	{ MODKEY,                       XK_d,      	spawn,          {.v = dmenucmd } },
+	{ MODKEY|ShiftMask,		XK_c,		spawn,		SHCMD("configmod") },
 	{ MODKEY|ShiftMask,		XK_d,		spawn,		SHCMD("~/.config/rofi/launchers/type-4/launcher.sh") },
 	{ MODKEY,             		XK_Return, 	spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      	togglebar,      {0} },
@@ -198,9 +203,9 @@ static const Button buttons[] = {
   	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
-/*	{ ClkStatusText,        0,              Button1,        sigstatusbar,   {.i = 1} },
-	{ ClkStatusText,        0,              Button2,        sigstatusbar,   {.i = 2} },
-	{ ClkStatusText,        0,              Button3,        sigstatusbar,   {.i = 3} }, */
+	{ ClkStatusText,        0,              Button1,        spawn,   	{.v = statuscmd} },
+	{ ClkStatusText,        0,              Button2,        spawn,   	{.v = statuscmd} },
+	{ ClkStatusText,        0,              Button3,        spawn,   	{.v = statuscmd} },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },

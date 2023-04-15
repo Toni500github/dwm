@@ -620,7 +620,7 @@ buttonpress(XEvent *e)
 				char *text, *s, ch;
 				*lastbutton = '0' + ev->button;
 
-				x = selmon->ww - statusw;
+				x = selmon->ww - statusw - getsystraywidth();
 				click = ClkStatusText;
 
 				statuscmdn = 0;
