@@ -20,6 +20,7 @@ static const int rmaster            = 1;        /* 1 means master-area is initia
 static const int showsystray        = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
+static const Bool viewontag         = True;     /* Switch view on tag switch */
 static const char buttonbar[]       = " |";
 #define ICONSIZE 16
 #define ICONSPACING 5
@@ -32,7 +33,7 @@ static char normbordercolor[]       = "#444444";
 static char normfgcolor[]           = "#bbbbbb";
 static char selfgcolor[]            = "#eeeeee";
 static char selbordercolor[]        = "#24a4d6";
-static char selbgcolor[]            = "#005577";
+static char selbgcolor[]            = "#227dc7";
 
 static char *colors[][3] = {
        /*               fg                  bg               border   */
@@ -70,7 +71,9 @@ static const Rule rules[] = {
 	/* class               instance  title                      tags mask  isfloating  isterminal  noswallow  monitor */
 	{ "Gimp",              NULL,     NULL,                        0,         1,          0,           0,        -1 },
 	{ "Firefox",           NULL,     NULL,                        1 << 8,    0,          0,          -1,        -1 },
+	{ "mpv",	       NULL,	 NULL,			      0,	 0,	     0,		 -1,	    -1 },
 	{ "St",                NULL,     NULL,                        0,         0,          1,           0,        -1 },
+  	{ "Steam",             "Steam",  NULL,                        0,         1,          0,           1,        -1 },
 	{ NULL,                NULL,     "Event Tester",              0,         0,          0,           1,        -1 }, /* xev */
 };
 
@@ -113,7 +116,7 @@ static const char *statuscmd[] = { "/bin/sh", "-c", NULL, NULL };
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbordercolor, "-sf", selfgcolor, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, /*"-sb", selbordercolor,*/ "-sf", selfgcolor, NULL };
 static const char *termcmd[]  = { "st", NULL };
 
 static const Key keys[] = {
@@ -166,7 +169,11 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_period, 	tagmon,         {.i = +1 } },
 /*	{ MODKEY|ShiftMask,           	XK_q,      	exitdwm,	{0}	},*/
 	{ MODKEY|ShiftMask,             XK_q,      	spawn,          SHCMD("sysact") },
-	{ MODKEY|ShiftMask,             XK_r,      	quit,           {1} }, // it will self restart 
+	{ MODKEY|ShiftMask,             XK_r,      	quit,           {1} }, // it will self restart
+	{ MODKEY,                       XK_x,   	viewtoleft,     {0} },
+        { MODKEY,                       XK_v,  		viewtoright,    {0} },
+        { MODKEY|ShiftMask,             XK_x,   	tagtoleft,      {0} },
+        { MODKEY|ShiftMask,             XK_v,  		tagtoright,     {0} },
   	{ MODKEY|ShiftMask,             XK_s,       	spawn,          {.v = (const char*[]){ "flameshot", "gui", NULL} } },
 
   	{ MODKEY,                       XK_Down,   	moveresize,     {.v = "0x 25y 0w 0h" } },
@@ -186,13 +193,13 @@ static const Key keys[] = {
 	{ MODKEY|ControlMask|ShiftMask, XK_Left,   	moveresizeedge, {.v = "L"} },
 	{ MODKEY|ControlMask|ShiftMask, XK_Right,  	moveresizeedge, {.v = "R"} },
 
-	{ 0, XF86XK_AudioMute,		                spawn,		SHCMD("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle; kill -35 $(pidof slbar)") },
+	/* { 0, XF86XK_AudioMute,		                spawn,		SHCMD("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle; kill -35 $(pidof slbar)") },
 	{ 0, XF86XK_AudioRaiseVolume,	            spawn,		SHCMD("wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%+; kill -35 $(pidof slbar)") },
-	{ 0, XF86XK_AudioLowerVolume,	            spawn,		SHCMD("wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%-; kill -35 $(pidof slbar)") },
-	/*{ 0, XF86XK_AudioMute,			   	spawn,	   	{.v = (const char*[]){ "pamixer", "-t",   NULL } } },
+	{ 0, XF86XK_AudioLowerVolume,	            spawn,		SHCMD("wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%-; kill -35 $(pidof slbar)") }, */
+	{ 0, XF86XK_AudioMute,			   	spawn,	   	{.v = (const char*[]){ "pamixer", "-t",   NULL } } },
 	{ 0, XF86XK_AudioRaiseVolume,		   	spawn,	   	{.v = (const char*[]){ "pamixer", "-i", "2", NULL } } },
 	{ 0, XF86XK_AudioLowerVolume,		   	spawn,	   	{.v = (const char*[]){ "pamixer", "-d", "2", NULL } } },
-	*/
+
 };
 
 /* button definitions */
