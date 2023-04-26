@@ -2,10 +2,6 @@
 #include <X11/XF86keysym.h>
 #include "exitdwm.c"
 #include "movestack.c"
-#include "layouts.c"
-#include "gaplessgrid.c"
-#include "nrowgrid.c"
-#define FORCE_VSPLIT 1
 
 /* appearance */
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
@@ -85,12 +81,9 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ " ",      tile },    /* first entry is default */
-	{ " ",      NULL },    /* no layout function means floating behavior */
-	{ " ",      monocle },
-	{ "HHH",      grid },
-  	{ "###",      gaplessgrid },
-	{ ":::",      nrowgrid },
+	{ " ",       tile },    /* first entry is default */
+	{ " ",       NULL },    /* no layout function means floating behavior */
+	{ " ",       monocle },
 	{ "|M|",      centeredmaster },
         { ">M>",      centeredfloatingmaster },
 };
@@ -150,11 +143,8 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_t,      	setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      	setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      	setlayout,      {.v = &layouts[2]} },
-  	{ MODKEY,                       XK_g,       	setlayout,      {.v = &layouts[3]} },
-  	{ MODKEY|ShiftMask,             XK_g,       	setlayout,      {.v = &layouts[4]} },
-  	{ MODKEY,                       XK_n,       	setlayout,      {.v = &layouts[5]} },
-	{ MODKEY,                       XK_u,      	setlayout,      {.v = &layouts[6]} },
-        { MODKEY,                       XK_o,      	setlayout,      {.v = &layouts[7]} },
+	{ MODKEY,                       XK_u,      	setlayout,      {.v = &layouts[3]} },
+        { MODKEY,                       XK_o,      	setlayout,      {.v = &layouts[4]} },
 	{ MODKEY,                       XK_space,  	setlayout,      {0} },
 	{ MODKEY,			XK_a,  		cyclelayout,    {.i = -1 } },
 	{ MODKEY,           		XK_s, 		cyclelayout,    {.i = +1 } },
