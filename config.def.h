@@ -35,7 +35,8 @@ static char *colors[][3] = {
        /*               fg                  bg               border   */
        [SchemeNorm] = { normfgcolor,      normbgcolor,     normbordercolor },
        [SchemeSel]  = { selfgcolor,       selbgcolor,      selbordercolor  },
-       [SchemeTitle]= { selfgcolor,     selbgcolor,    normbgcolor     },
+       [SchemeTitle]= { selfgcolor,       selbgcolor,      normbgcolor     },
+       [SchemeHid]  = { selbgcolor,       normbgcolor,     selbgcolor      }
 };
 
 
@@ -130,8 +131,10 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,		XK_d,		spawn,		SHCMD("~/.config/rofi/launchers/type-4/launcher.sh") },
 	{ MODKEY,             		XK_Return, 	spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      	togglebar,      {0} },
-	{ MODKEY,                       XK_j,      	focusstack,     {.i = +1 } },
-	{ MODKEY,                       XK_k,      	focusstack,     {.i = -1 } },
+	{ MODKEY,                       XK_j,      	focusstackvis,  {.i = +1 } },
+        { MODKEY,                       XK_k,      	focusstackvis,  {.i = -1 } },
+        { MODKEY|ShiftMask,             XK_n,      	focusstackhid,  {.i = +1 } },
+        { MODKEY|ShiftMask,             XK_p,      	focusstackhid,  {.i = -1 } },
 	{ MODKEY,                       XK_i,      	incnmaster,     {.i = +1 } },
 	{ MODKEY,                       XK_h,      	setmfact,       {.f = -0.02} },
 	{ MODKEY,                       XK_l,      	setmfact,       {.f = +0.02} },
@@ -146,8 +149,6 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_u,      	setlayout,      {.v = &layouts[3]} },
         { MODKEY,                       XK_o,      	setlayout,      {.v = &layouts[4]} },
 	{ MODKEY,                       XK_space,  	setlayout,      {0} },
-	{ MODKEY,			XK_a,  		cyclelayout,    {.i = -1 } },
-	{ MODKEY,           		XK_s, 		cyclelayout,    {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_space,  	togglefloating, {0} },
 	{ MODKEY|ShiftMask,             XK_f,      	togglefullscr,  {0} },
  	{ MODKEY|ShiftMask,             XK_i,      	togglermaster,  {0} },
@@ -157,6 +158,9 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_period, 	focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  	tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, 	tagmon,         {.i = +1 } },
+	{ MODKEY,                       XK_s,      	show,           {0} },
+        { MODKEY,             		XK_a,      	showall,        {0} },
+	{ MODKEY|ShiftMask,             XK_h,      	hide,           {0} },
 /*	{ MODKEY|ShiftMask,           	XK_q,      	exitdwm,	{0}	},*/
 	{ MODKEY|ShiftMask,             XK_q,      	spawn,          SHCMD("sysact") },
 	{ MODKEY|ShiftMask,             XK_r,      	quit,           {1} }, // it will self restart
@@ -200,6 +204,7 @@ static const Button buttons[] = {
   	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
+	{ ClkWinTitle,          0,              Button1,        togglewin,      {0} },
 	{ ClkStatusText,        0,              Button1,        spawn,   	{.v = statuscmd} },
 	{ ClkStatusText,        0,              Button2,        spawn,   	{.v = statuscmd} },
 	{ ClkStatusText,        0,              Button3,        spawn,   	{.v = statuscmd} },
