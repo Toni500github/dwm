@@ -1189,8 +1189,9 @@ drawbar(Monitor *m)
                                 }
                                 remainder--;
                         }
-			drw_text(drw, x, 0, tabw, bh, lrpad / 2 + (c->icon ? c->icw + ICONSPACING : 0), c->name, 0);
+			drw_text(drw, x, 0, tabw+1, bh, lrpad / 2 + (c->icon ? c->icw + ICONSPACING : 0), c->name, 0);
 			if (c->icon) drw_pic(drw, x + lrpad / 2, (bh - c->ich) / 2, c->icw, c->ich, c->icon);
+			if (m->sel->isfloating) drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
                         x += tabw;
                 }
 		} else {
