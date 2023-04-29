@@ -138,6 +138,9 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_i,      	incnmaster,     {.i = +1 } },
 	{ MODKEY,                       XK_h,      	setmfact,       {.f = -0.02} },
 	{ MODKEY,                       XK_l,      	setmfact,       {.f = +0.02} },
+        { MODKEY|ShiftMask,             XK_h,           setcfact,       {.f = +0.25} },
+        { MODKEY|ShiftMask,             XK_l,           setcfact,       {.f = -0.25} },
+        { MODKEY|ShiftMask,             XK_o,           setcfact,       {.f =  0.00} },
   	{ MODKEY|ShiftMask,             XK_j,       	movestack,      {.i = +1 } },
   	{ MODKEY|ShiftMask,             XK_k,       	movestack,      {.i = -1 } },
 	{ MODKEY,                       XK_z, 		zoom,           {0} },
@@ -160,7 +163,7 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_period, 	tagmon,         {.i = +1 } },
 	{ MODKEY,                       XK_s,      	show,           {0} },
         { MODKEY,             		XK_a,      	showall,        {0} },
-	{ MODKEY|ShiftMask,             XK_h,      	hide,           {0} },
+	{ MODKEY|ControlMask,           XK_h,      	hide,           {0} },
 /*	{ MODKEY|ShiftMask,           	XK_q,      	exitdwm,	{0}	},*/
 	{ MODKEY|ShiftMask,             XK_q,      	spawn,          SHCMD("sysact") },
 	{ MODKEY|ShiftMask,             XK_r,      	quit,           {1} }, // it will self restart
