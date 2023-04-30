@@ -99,14 +99,6 @@ static const Layout layouts[] = {
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
-#define STATUSBAR "slbar"
-
-/* commands spawned when clicking statusbar, the mouse button pressed is exported as BUTTON */
-static const StatusCmd statuscmds[] = {
-       { "notify-send Mouse$BUTTON", 1 },
-};
-static const char *statuscmd[] = { "/bin/sh", "-c", NULL, NULL };
-
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, /*"-sb", selbordercolor,*/ "-sf", selfgcolor, NULL };
@@ -207,9 +199,6 @@ static const Button buttons[] = {
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
 	{ ClkWinTitle,          0,              Button1,        togglewin,      {0} },
-	{ ClkStatusText,        0,              Button1,        spawn,   	{.v = statuscmd} },
-	{ ClkStatusText,        0,              Button2,        spawn,   	{.v = statuscmd} },
-	{ ClkStatusText,        0,              Button3,        spawn,   	{.v = statuscmd} },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
