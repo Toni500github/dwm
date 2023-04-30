@@ -628,8 +628,10 @@ buttonpress(XEvent *e)
 				click = ClkLtSymbol;
 	       		  //else if (ev->x > selmon->ww - statusw) {//(int)TEXTW(stext) - getsystraywidth())
 			  /* 2px right padding */
-	        else if (ev->x > selmon->ww - TEXTW(stext) + lrpad - 2)
-				click = ClkStatusText;
+	        else if (ev->x > selmon->ww - TEXTW(stext) + lrpad - 2) {
+			x = selmon->ww - TEXTW(stext) + lrpad;
+			click = ClkStatusText;
+		}
 			else {
 				x += blw;
 				c = m->clients;
@@ -644,9 +646,9 @@ buttonpress(XEvent *e)
 
 				click = ClkWinTitle;
 				arg.v = c;
-               }
+               			}
+        		}
         	}
-        }
 
 	} else if ((c = wintoclient(ev->window))) {
 		focus(c);
@@ -2721,15 +2723,15 @@ tile(Monitor *m)
 		if (i < m->nmaster) {
       		h = (m->wh - my) * (c->cfact / mfacts);
 	       	resize(c, m->rmaster ? m->wx + m->ww - mw : m->wx,
-+			       m->wy + my, mw - (2*c->bw), h - (2*c->bw), 0);
-			if (my + HEIGHT(c) < m->wh)
+			       m->wy + my, mw - (2*c->bw), h - (2*c->bw), 0);
+			//if (my + HEIGHT(c) < m->wh)
 				my += HEIGHT(c);
 		mfacts -= c->cfact;
 		} else {
       		h = (m->wh - ty) * (c->cfact / sfacts);
          	resize(c, m->rmaster ? m->wx : m->wx + mw, m->wy + ty,
-+			       m->ww - mw - (2*c->bw), h - (2*c->bw), 0);
-			if (ty + HEIGHT(c) < m->wh)
+			       m->ww - mw - (2*c->bw), h - (2*c->bw), 0);
+			//if (ty + HEIGHT(c) < m->wh)
 				ty += HEIGHT(c);
 		sfacts -= c->cfact;
 		}
