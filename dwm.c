@@ -2450,7 +2450,7 @@ setup(void)
 
 	signal(SIGHUP, sighup);
 	signal(SIGTERM, sigterm);
-
+	putenv("_JAVA_AWT_WM_NONREPARENTING=1");
 	/* init screen */
 	screen = DefaultScreen(dpy);
 	sw = DisplayWidth(dpy, screen);
