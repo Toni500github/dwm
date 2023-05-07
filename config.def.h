@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 #include <X11/XF86keysym.h>
 #include "exitdwm.c"
-#include "movestack.c"
+//#include "movestack.c"
 
 /* appearance */
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
@@ -35,7 +35,7 @@ static char *colors[][3] = {
        [SchemeNorm] = { normfgcolor,      normbgcolor,     normbordercolor },
        [SchemeSel]  = { selfgcolor,       selbgcolor,      selbordercolor  },
        [SchemeTitle]= { selfgcolor,       selbgcolor,      normbgcolor     },
-//       [SchemeHid]  = { selbgcolor,       normbgcolor,     selbgcolor      }
+       [SchemeHid]  = { selbgcolor,       normbgcolor,     selbgcolor      }
 };
 
 
@@ -104,6 +104,13 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, /*"-sb", selbordercolor,*/ "-sf", selfgcolor, NULL };
 static const char *termcmd[]  = { "st", NULL };
 
+/* per tag commands for tagspawn function */
+static const char** const tagcommands[LENGTH(tags)] = {
+        [0] = termcmd,
+	[8] = (const char*[]){ "audacious", NULL },
+	[8] = (const char*[]){ "st", "-e", "steam", NULL }
+};
+
 static const Key keys[] = {
 	/* modifier                     key        	function        argument */
 	TAGKEYS(                        XK_1,                      	0)
@@ -121,17 +128,20 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,		XK_c,		spawn,		SHCMD("configmod") },
 	{ MODKEY|ShiftMask,		XK_d,		spawn,		SHCMD("~/.config/rofi/launchers/type-4/launcher.sh") },
 	{ MODKEY,             		XK_Return, 	spawn,          {.v = termcmd } },
+	{ MODKEY|ControlMask,           XK_Return, 	tagspawn,       {0} },
 	{ MODKEY,                       XK_b,      	togglebar,      {0} },
-	{ MODKEY,                       XK_j,      	focusstack,     {.i = +1 } },
-        { MODKEY,                       XK_k,      	focusstack,     {.i = -1 } },
+	{ MODKEY,                       XK_j,      	focusstackvis,  {.i = +1 } },
+        { MODKEY,                       XK_k,      	focusstackvis,  {.i = -1 } },
+        { MODKEY|ShiftMask,             XK_j,      	focusstackhid,  {.i = +1 } },
+        { MODKEY|ShiftMask,             XK_k,      	focusstackhid,  {.i = -1 } },
 	{ MODKEY,                       XK_i,      	incnmaster,     {.i = +1 } },
 	{ MODKEY,                       XK_h,      	setmfact,       {.f = -0.02} },
 	{ MODKEY,                       XK_l,      	setmfact,       {.f = +0.02} },
         { MODKEY|ShiftMask,             XK_h,           setcfact,       {.f = +0.25} },
         { MODKEY|ShiftMask,             XK_l,           setcfact,       {.f = -0.25} },
         { MODKEY|ShiftMask,             XK_o,           setcfact,       {.f =  0.00} },
-  	{ MODKEY|ShiftMask,             XK_j,       	movestack,      {.i = +1 } },
-  	{ MODKEY|ShiftMask,             XK_k,       	movestack,      {.i = -1 } },
+/*  	{ MODKEY|ShiftMask,             XK_j,       	movestack,      {.i = +1 } },
+  	{ MODKEY|ShiftMask,             XK_k,       	movestack,      {.i = -1 } },*/
 	{ MODKEY,                       XK_z, 		zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    	view,           {0} },
 	{ MODKEY,             		XK_q,      	killclient,     {0} },
@@ -150,10 +160,10 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_period, 	focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  	tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, 	tagmon,         {.i = +1 } },
-/*	{ MODKEY,                       XK_s,      	show,           {0} },
-        { MODKEY,             		XK_a,      	showall,        {0} },
+	{ MODKEY,                       XK_s,      	show,           {0} },
+        { MODKEY|ShiftMask,    		XK_a,      	showall,        {0} },
 	{ MODKEY|ControlMask,           XK_h,      	hide,           {0} },
-	{ MODKEY|ShiftMask,           	XK_q,      	exitdwm,	{0}	},*/
+/*	{ MODKEY|ShiftMask,           	XK_q,      	exitdwm,	{0}	},*/
 	{ MODKEY|ShiftMask,             XK_q,      	spawn,          SHCMD("sysact") },
 	{ MODKEY|ShiftMask,             XK_r,      	quit,           {1} }, // it will self restart
 	{ MODKEY,                       XK_x,   	viewtoleft,     {0} },
@@ -196,6 +206,7 @@ static const Button buttons[] = {
   	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
+	{ ClkWinTitle,          0,              Button1,        togglewin,      {0} },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },

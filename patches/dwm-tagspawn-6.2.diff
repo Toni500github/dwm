@@ -1,0 +1,64 @@
+From 62b79d4c032556794b82305a03606f752c096d8b Mon Sep 17 00:00:00 2001
+From: Sage Raflik <neonfuz@gmail.com>
+Date: Sat, 11 Dec 2021 22:58:03 -0600
+Subject: [PATCH] tagspawn
+
+---
+ config.def.h |  6 ++++++
+ dwm.c        | 12 ++++++++++++
+ 2 files changed, 18 insertions(+)
+
+diff --git a/config.def.h b/config.def.h
+index 1c0b587..f727668 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -59,10 +59,16 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn()
+ static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+ static const char *termcmd[]  = { "st", NULL };
+ 
++/* per tag commands for tagspawn function */
++static const char ** const tagcommands[LENGTH(tags)] = {
++	[0] = termcmd, /* first tag */
++};
++
+ static Key keys[] = {
+ 	/* modifier                     key        function        argument */
+ 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
+ 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
++	{ MODKEY|CtrlMask,              XK_Return, tagspawn,       {0} },
+ 	{ MODKEY,                       XK_b,      togglebar,      {0} },
+ 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
+ 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
+diff --git a/dwm.c b/dwm.c
+index 4465af1..b70cc67 100644
+--- a/dwm.c
++++ b/dwm.c
+@@ -206,6 +206,7 @@ static void seturgent(Client *c, int urg);
+ static void showhide(Client *c);
+ static void sigchld(int unused);
+ static void spawn(const Arg *arg);
++static void tagspawn(const Arg *arg);
+ static void tag(const Arg *arg);
+ static void tagmon(const Arg *arg);
+ static void tile(Monitor *);
+@@ -1652,6 +1653,17 @@ spawn(const Arg *arg)
+ 	}
+ }
+ 
++void
++tagspawn(const Arg *arg)
++{
++	for (int i=0; i<LENGTH(tags); ++i) {
++		if (selmon->tagset[selmon->seltags] & (1<<i)) {
++			const Arg a = {.v = tagcommands[i]};
++			spawn(&a);
++		}
++	}
++}
++
+ void
+ tag(const Arg *arg)
+ {
+-- 
+2.33.1
+
