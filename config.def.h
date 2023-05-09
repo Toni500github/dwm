@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 #include <X11/XF86keysym.h>
 #include "exitdwm.c"
-//#include "movestack.c"
+#include "movestack.c"
 
 /* appearance */
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
@@ -106,9 +106,7 @@ static const char *termcmd[]  = { "st", NULL };
 
 /* per tag commands for tagspawn function */
 static const char** const tagcommands[LENGTH(tags)] = {
-        [0] = termcmd,
-	[8] = (const char*[]){ "audacious", NULL },
-	[8] = (const char*[]){ "st", "-e", "steam", NULL }
+	[8] = (const char*[]){ "audacious", NULL }
 };
 
 static const Key keys[] = {
@@ -135,13 +133,13 @@ static const Key keys[] = {
         { MODKEY|ShiftMask,             XK_j,      	focusstackhid,  {.i = +1 } },
         { MODKEY|ShiftMask,             XK_k,      	focusstackhid,  {.i = -1 } },
 	{ MODKEY,                       XK_i,      	incnmaster,     {.i = +1 } },
-	{ MODKEY,                       XK_h,      	setmfact,       {.f = -0.02} },
-	{ MODKEY,                       XK_l,      	setmfact,       {.f = +0.02} },
-        { MODKEY|ShiftMask,             XK_h,           setcfact,       {.f = +0.25} },
-        { MODKEY|ShiftMask,             XK_l,           setcfact,       {.f = -0.25} },
+	{ MODKEY,                       XK_h,      	setmfact,       {.f = -0.01} },
+	{ MODKEY,                       XK_l,      	setmfact,       {.f = +0.01} },
+        { MODKEY|ShiftMask,             XK_h,           setcfact,       {.f = +0.05} },
+        { MODKEY|ShiftMask,             XK_l,           setcfact,       {.f = -0.05} },
         { MODKEY|ShiftMask,             XK_o,           setcfact,       {.f =  0.00} },
-/*  	{ MODKEY|ShiftMask,             XK_j,       	movestack,      {.i = +1 } },
-  	{ MODKEY|ShiftMask,             XK_k,       	movestack,      {.i = -1 } },*/
+  	{ MODKEY|ControlMask,           XK_j,       	movestack,      {.i = +1 } },
+  	{ MODKEY|ControlMask,           XK_k,       	movestack,      {.i = -1 } },
 	{ MODKEY,                       XK_z, 		zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    	view,           {0} },
 	{ MODKEY,             		XK_q,      	killclient,     {0} },
@@ -205,7 +203,7 @@ static const Button buttons[] = {
 	{ ClkButton, 		0,	        Button1,	spawn,		{.v = termcmd } },
   	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
-	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
+	{ ClkWinTitle,          0,              Button3,        zoom,           {0} },
 	{ ClkWinTitle,          0,              Button1,        togglewin,      {0} },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
