@@ -327,6 +327,7 @@ static Systray *systray = NULL;
 static const char broken[] = "broken";
 static char stext[1024];
 static int screen;
+static int tw = 0, stw = 0;
 static int sw, sh;           /* X display screen geometry width, height */
 static int bh, blw = 0;      /* bar height */
 static int lrpad;            /* sum of left and right padding for text */
@@ -627,7 +628,7 @@ buttonpress(XEvent *e)
 				arg.ui = 1 << i;
 			} else if (ev->x < x + blw)
 				click = ClkLtSymbol;
-	    	else if (ev->x > selmon->ww + TEXTW(stext) - 2) //else if (ev->x > selmon->ww - (int)TEXTW(stext) - getsystraywidth())
+	    	else if (ev->x > selmon->ww - tw - stw - 2) //else if (ev->x > selmon->ww - (int)TEXTW(stext) - getsystraywidth())
 				click = ClkStatusText;
         	else {
 				x += blw;
@@ -1094,7 +1095,7 @@ drawstatusbar(Monitor *m, int bh, char* stext) {
 void
 drawbar(Monitor *m)
 {
-	int x, w, tw = 0, stw = 0, n = 0, scm;
+	int x, w, n = 0, scm;
 	int boxs = drw->fonts->h / 9;
 	int boxw = drw->fonts->h / 6 + 2;
 	unsigned int i, occ = 0, urg = 0;
@@ -1142,7 +1143,7 @@ drawbar(Monitor *m)
 	if ((w = m->ww - tw - stw - x) > bh) {
 		if (n > 0) {
                 int remainder = w % n;
-                int tabw = (1.0 / (double)n) * w + 1;
+                int tabw = (1.0 / (double)n) * w;
                 for (c = m->clients; c; c = c->next) {
                         if (!ISVISIBLE(c))
                                 continue;
@@ -1160,9 +1161,11 @@ drawbar(Monitor *m)
                                 }
                                 remainder--;
                         }
-                        drw_text(drw, x, 0, tabw+1, bh, lrpad / 2 + (c->icon ? c->icw + ICONSPACING : 0), c->name, 0);
-			 if (c->icon)
-				drw_pic(drw, x + lrpad / 2, (bh - c->ich) / 2, c->icw, c->ich, c->icon);
+                        //drw_text(drw, x, 0, tabw+1, bh, lrpad / 2 + (c->icon ? c->icw + ICONSPACING : 0), c->name, 0);
+		 	drw_text(drw, x, 0, tabw+3, bh, (TEXTW(c->name) < tabw ? (tabw - c->icw - TEXTW(c->name) + lrpad) / 2 : lrpad / 2) + (c->icon ? c->icw + ICONSPACING : 0), c->name, 0);
+			if (c->icon)
+				//drw_pic(drw, x + lrpad / 2, (bh - c->ich) / 2, c->icw, c->ich, c->icon);
+				drw_pic(drw, x + (TEXTW(c->name) < tabw ? (tabw - c->icw - TEXTW(c->name) + lrpad) / 2 : lrpad / 2), (bh - c->ich) / 2, c->icw, c->ich, c->icon);
 			if (c->isfloating)
                                 drw_rect(drw, x + boxs, boxs, boxw, boxw, c->isfixed, 0);
                         x += tabw;
