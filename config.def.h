@@ -38,16 +38,17 @@ static char *colors[][3] = {
        [SchemeHid]  = { selbgcolor,       normbgcolor,     selbgcolor      }
 };
 
-
 static const char *const autostart[] = {
 	"nm-applet", NULL,
 //	"slbar",    NULL,
 	"slstatus",  NULL,
   	"picom",  "-b", NULL,
-	"sh", "/home/toni/.conky/awesome-conky/launch.sh", NULL,
+	"sh", "~/bin/mate.sh", NULL,
+//	"sh", "/home/toni/.conky/awesome-conky/launch.sh", NULL,
 	"nitrogen", "--set-scaled", "/home/toni/Immagini/005.png", NULL,
   	"sh", "-c", "xset r rate 270 45 &", NULL,
 //	"dwmblocks", NULL,
+	"/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1" , NULL,
 	NULL /* terminate */
 };
 
@@ -67,16 +68,16 @@ static const Rule rules[] = {
 	/* class               instance  title                      tags mask  isfloating  isterminal  noswallow  monitor */
 	{ "Gimp",              NULL,     NULL,                        0,         1,          0,           0,        -1 },
 	{ "Firefox",           NULL,     NULL,                        1 << 8,    0,          0,          -1,        -1 },
-	{ "mpv",	       NULL,	 NULL,			      0,	 0,	     0,		 -1,	    -1 },
+	{ "mpv",	       NULL,	 NULL,			      0,	 1,	     0,		 -1,	    -1 },
 	{ "St",                NULL,     NULL,                        0,         0,          1,           0,        -1 },
-  	{ "Steam",             "Steam",  NULL,                        0,         1,          0,           1,        -1 },
+  	{ "steam",             NULL,  	 NULL,                        0,         1,          0,           1,        -1 },
 	{ NULL,                NULL,     "Event Tester",              0,         0,          0,           1,        -1 }, /* xev */
 };
 
 /* layout(s) */
 static float mfact     = 0.50; /* factor of master area size [0.05..0.95] */
 static int nmaster     = 1;    /* number of clients in master area */
-static int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
+static int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
 static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
 
 static const Layout layouts[] = {
@@ -126,6 +127,7 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,		XK_c,		spawn,		SHCMD("configmod") },
 	{ MODKEY|ShiftMask,		XK_d,		spawn,		SHCMD("~/.config/rofi/launchers/type-4/launcher.sh") },
 	{ MODKEY,             		XK_Return, 	spawn,          {.v = termcmd } },
+	{ MODKEY|ShiftMask,             XK_Return,      spawn,          {.v = (const char*[]){ "st", NULL } } },
 	{ MODKEY|ControlMask,           XK_Return, 	tagspawn,       {0} },
 	{ MODKEY,                       XK_b,      	togglebar,      {0} },
 	{ MODKEY,                       XK_j,      	focusstackvis,  {.i = -1 } },
@@ -142,6 +144,7 @@ static const Key keys[] = {
   	{ MODKEY|ControlMask,           XK_k,       	movestack,      {.i = -1 } },
 	{ MODKEY,                       XK_z, 		zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    	view,           {0} },
+	{ Mod1Mask,                     XK_Tab,         spawn,          SHCMD("rofi -show window -show-icons -config ~/.local/src/rofi/config.rasi") },
 	{ MODKEY,             		XK_q,      	killclient,     {0} },
 	{ MODKEY,                       XK_t,      	setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      	setlayout,      {.v = &layouts[1]} },
