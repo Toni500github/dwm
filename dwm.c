@@ -192,6 +192,7 @@ typedef struct {
 	int noswallow;
 	int monitor;
 } Rule;
+#define RULE(...) { .monitor = -1, __VA_ARGS__ },
 
 typedef struct Systray   Systray;
 struct Systray {
@@ -437,7 +438,7 @@ applyrules(Client *c)
 	XClassHint ch = { NULL, NULL };
 
 	/* rule matching */
-	c->iscentered = 0;
+	c->iscentered = 1;
 	c->isfloating = 0;
 	c->tags = 0;
 	XGetClassHint(dpy, c->win, &ch);
