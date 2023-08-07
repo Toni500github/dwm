@@ -16,7 +16,6 @@ static const int showsystray        = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const Bool viewontag         = True;     /* Switch view on tag switch */
-static const Gap default_gap        = {.isgap = 1, .realgap = 10, .gappx = 10};
 static const char buttonbar[]       = " |";
 #define ICONSIZE 16
 #define ICONSPACING 5
@@ -174,10 +173,6 @@ static const Key keys[] = {
         { MODKEY|ShiftMask,             XK_x,   	tagtoleft,      {0} },
         { MODKEY|ShiftMask,             XK_v,  		tagtoright,     {0} },
   	{ MODKEY|ShiftMask,             XK_s,       	spawn,          {.v = (const char*[]){ "flameshot", "gui", NULL} } },
-	{ MODKEY,                       XK_minus,  	setgaps,        {.i = -5 } },
-	{ MODKEY,                       XK_equal,  	setgaps,        {.i = +5 } },
-	{ MODKEY|ShiftMask,             XK_minus,  	setgaps,        {.i = GAP_RESET } },
-	{ MODKEY|ShiftMask,             XK_equal,  	setgaps,        {.i = GAP_TOGGLE} },
 
   	{ MODKEY,                       XK_Down,   	moveresize,     {.v = "0x 25y 0w 0h" } },
 	{ MODKEY,                       XK_Up,     	moveresize,     {.v = "0x -25y 0w 0h" } },
