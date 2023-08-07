@@ -195,12 +195,14 @@ static const Key keys[] = {
 	{ MODKEY|ControlMask|ShiftMask, XK_Left,   	moveresizeedge, {.v = "L"} },
 	{ MODKEY|ControlMask|ShiftMask, XK_Right,  	moveresizeedge, {.v = "R"} },
 
-	/* { 0, XF86XK_AudioMute,		                spawn,		SHCMD("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle; kill -35 $(pidof slbar)") },
-	{ 0, XF86XK_AudioRaiseVolume,	            spawn,		SHCMD("wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%+; kill -35 $(pidof slbar)") },
-	{ 0, XF86XK_AudioLowerVolume,	            spawn,		SHCMD("wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%-; kill -35 $(pidof slbar)") }, */
+	/*
 	{ 0, XF86XK_AudioMute,			   	spawn,	   	{.v = (const char*[]){ "pamixer", "-t",   NULL } } },
 	{ 0, XF86XK_AudioRaiseVolume,		   	spawn,	   	{.v = (const char*[]){ "pamixer", "-i", "2", NULL } } },
 	{ 0, XF86XK_AudioLowerVolume,		   	spawn,	   	{.v = (const char*[]){ "pamixer", "-d", "2", NULL } } },
+	*/
+	{ 0, XF86XK_AudioMute,                          spawn,          SHCMD("~/.config/dunst/scripts/volume mute") },
+        { 0, XF86XK_AudioRaiseVolume,                   spawn,          SHCMD("~/.config/dunst/scripts/volume up") },
+        { 0, XF86XK_AudioLowerVolume,                   spawn,          SHCMD("~/.config/dunst/scripts/volume down") }
 
 };
 
