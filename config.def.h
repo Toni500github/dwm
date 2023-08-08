@@ -14,6 +14,11 @@ static const int swallowfloating    = 1;        /* 1 means swallow floating wind
 static const int rmaster            = 0;        /* 1 means master-area is initially on the right */
 static const int showsystray        = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
+static const unsigned int gappih    = 20;       /* horiz inner gap between windows */
+static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
+static const unsigned int gappoh    = 10;       /* horiz outer gap between windows and screen edge */
+static const unsigned int gappov    = 10;       /* vert outer gap between windows and screen edge */
+static       int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const Bool viewontag         = True;     /* Switch view on tag switch */
 static const char buttonbar[]       = " |";
@@ -29,6 +34,9 @@ static char normfgcolor[]           = "#bbbbbb";
 static char selfgcolor[]            = "#eeeeee";
 static char selbordercolor[]        = "#24a4d6";
 static char selbgcolor[]            = "#227dc7";
+
+#define FORCE_VSPLIT 1  /* nrowgrid layout: force two clients to always split vertically */
+#include "vanitygaps.c"
 
 static char *colors[][3] = {
        /*               fg                  bg               border   */
@@ -66,13 +74,13 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class               instance  title                      tags mask  isfloating  isterminal  noswallow  monitor */
-	RULE(.class = "audacious", .iscentered = 0)
 	{ "Gimp",              NULL,     NULL,                        0,         1,          0,           0,        -1 },
 	{ "Firefox",           NULL,     NULL,                        1 << 8,    0,          0,          -1,        -1 },
 	{ "mpv",	       NULL,	 NULL,			      0,	 1,	     0,		 -1,	    -1 },
 	{ "St",                NULL,     NULL,                        0,         0,          1,           0,        -1 },
   	{ "steam",             NULL,  	 NULL,                        0,         1,          0,           1,        -1 },
 	{ NULL,                NULL,     "Event Tester",              0,         0,          0,           1,        -1 }, /* xev */
+	RULE(.class = "Audacious", .iscentered = 0)
 };
 
 /* layout(s) */
@@ -88,6 +96,16 @@ static const Layout layouts[] = {
 	{ " ",       monocle },
 	{ "|M|",      centeredmaster },
         { ">M>",      centeredfloatingmaster },
+	{ "[@]",      spiral },
+        { "[\\]",     dwindle },
+        { "H[]",      deck },
+        { "TTT",      bstack },
+        { "===",      bstackhoriz },
+        { "HHH",      grid },
+        { "###",      nrowgrid },
+        { "---",      horizgrid },
+        { ":::",      gaplessgrid },
+        { NULL,       NULL },
 };
 
 /* key definitions */
@@ -173,6 +191,9 @@ static const Key keys[] = {
         { MODKEY|ShiftMask,             XK_x,   	tagtoleft,      {0} },
         { MODKEY|ShiftMask,             XK_v,  		tagtoright,     {0} },
   	{ MODKEY|ShiftMask,             XK_s,       	spawn,          {.v = (const char*[]){ "flameshot", "gui", NULL} } },
+	{ 0, XF86XK_AudioMute,                          spawn,          SHCMD("~/.config/dunst/scripts/volume mute") },
+        { 0, XF86XK_AudioRaiseVolume,                   spawn,          SHCMD("~/.config/dunst/scripts/volume up") },
+        { 0, XF86XK_AudioLowerVolume,                   spawn,          SHCMD("~/.config/dunst/scripts/volume down") },
 
   	{ MODKEY,                       XK_Down,   	moveresize,     {.v = "0x 25y 0w 0h" } },
 	{ MODKEY,                       XK_Up,     	moveresize,     {.v = "0x -25y 0w 0h" } },
@@ -191,14 +212,22 @@ static const Key keys[] = {
 	{ MODKEY|ControlMask|ShiftMask, XK_Left,   	moveresizeedge, {.v = "L"} },
 	{ MODKEY|ControlMask|ShiftMask, XK_Right,  	moveresizeedge, {.v = "R"} },
 
-	/*
-	{ 0, XF86XK_AudioMute,			   	spawn,	   	{.v = (const char*[]){ "pamixer", "-t",   NULL } } },
-	{ 0, XF86XK_AudioRaiseVolume,		   	spawn,	   	{.v = (const char*[]){ "pamixer", "-i", "2", NULL } } },
-	{ 0, XF86XK_AudioLowerVolume,		   	spawn,	   	{.v = (const char*[]){ "pamixer", "-d", "2", NULL } } },
-	*/
-	{ 0, XF86XK_AudioMute,                          spawn,          SHCMD("~/.config/dunst/scripts/volume mute") },
-        { 0, XF86XK_AudioRaiseVolume,                   spawn,          SHCMD("~/.config/dunst/scripts/volume up") },
-        { 0, XF86XK_AudioLowerVolume,                   spawn,          SHCMD("~/.config/dunst/scripts/volume down") }
+	{ MODKEY|Mod1Mask,              XK_u,      incrgaps,       {.i = +1 } },
+	{ MODKEY|Mod1Mask|ShiftMask,    XK_u,      incrgaps,       {.i = -1 } },
+	{ MODKEY|Mod1Mask,              XK_i,      incrigaps,      {.i = +1 } },
+	{ MODKEY|Mod1Mask|ShiftMask,    XK_i,      incrigaps,      {.i = -1 } },
+	{ MODKEY|Mod1Mask,              XK_o,      incrogaps,      {.i = +1 } },
+	{ MODKEY|Mod1Mask|ShiftMask,    XK_o,      incrogaps,      {.i = -1 } },
+	{ MODKEY|Mod1Mask,              XK_h,      incrihgaps,     {.i = +1 } },
+	{ MODKEY|Mod1Mask|ShiftMask,    XK_h,      incrihgaps,     {.i = -1 } },
+	{ MODKEY|Mod1Mask,              XK_v,      incrivgaps,     {.i = +1 } },
+	{ MODKEY|Mod1Mask|ShiftMask,    XK_v,      incrivgaps,     {.i = -1 } },
+	{ MODKEY|Mod1Mask,              XK_p,      incrohgaps,     {.i = +1 } },
+	{ MODKEY|Mod1Mask|ShiftMask,    XK_p,      incrohgaps,     {.i = -1 } },
+	{ MODKEY|Mod1Mask,              XK_y,      incrovgaps,     {.i = +1 } },
+	{ MODKEY|Mod1Mask|ShiftMask,    XK_y,      incrovgaps,     {.i = -1 } },
+	{ MODKEY|Mod1Mask,              XK_t,      togglegaps,     {0} },
+	{ MODKEY|Mod1Mask|ShiftMask,    XK_t,      defaultgaps,    {0} },
 
 };
 
@@ -207,7 +236,7 @@ static const Key keys[] = {
 static const Button buttons[] = {
 	/* click                event mask      button          function        argument */
 	{ ClkButton, 		0,	        Button1,	spawn,		{.v = termcmd } },
-	{ ClkStatusText,        0,              Button1,        spawn,          {.v = termcmd } },
+//	{ ClkStatusText,        0,              Button1,        spawn,          {.v = termcmd } },
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
  	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[1]} },
   	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
