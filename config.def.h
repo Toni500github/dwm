@@ -51,7 +51,6 @@ static const char *const autostart[] = {
 //	"slbar",    NULL,
 	"slstatus",  NULL,
   	"picom",  "-b", NULL,
-	"sh", "~/bin/mate.sh", NULL,
 //	"sh", "/home/toni/.conky/awesome-conky/launch.sh", NULL,
 	"nitrogen", "--set-scaled", "/home/toni/Immagini/005.png", NULL,
   	"sh", "-c", "xset r rate 270 45 &", NULL,
@@ -121,7 +120,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, /*"-sb", selbordercolor,*/ "-sf", selfgcolor, NULL };
+static const char *dmenucmd[] = { "dmenu_run_history", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
 static const char *termcmd[]  = { "tabbed", "-r", "2", "st", "-w", "''", NULL };
 
 /* per tag commands for tagspawn function */
@@ -185,6 +184,7 @@ static const Key keys[] = {
 	{ MODKEY|ControlMask,           XK_h,      	hide,           {0} },
 /*	{ MODKEY|ShiftMask,           	XK_q,      	exitdwm,	{0}	},*/
 	{ MODKEY|ShiftMask,             XK_q,      	spawn,          SHCMD("sysact") },
+	{ MODKEY|ShiftMask,             XK_t,           spawn,          SHCMD("dmenu-translate") },
 	{ MODKEY|ShiftMask,             XK_r,      	quit,           {1} }, // it will self restart
 	{ MODKEY,                       XK_x,   	viewtoleft,     {0} },
         { MODKEY,                       XK_v,  		viewtoright,    {0} },
