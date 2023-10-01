@@ -24,10 +24,10 @@ static const Bool viewontag         = True;     /* Switch view on tag switch */
 static const char buttonbar[]       = " |";
 #define ICONSIZE 16
 #define ICONSPACING 5
-static const char font[]          	= "monospace:size=10";
-static const char dmenufont[]       = "monospace:size=10";
+static const char font[]          	= "Noto Mono:style=Regular:size=10";
+static const char dmenufont[]       = "Noto Mono:style=Regular:size=10";
 //static const char *fonts[]	        = { "MesloLGS Nerd Font:size=11" };
-static const char *fonts[]          = { font, "Liberation Mono:pixelsize=12:antialias=true:autohint=true", "FontAwesome:style=Regular:pixelsize=15", "Iosevka:style:medium:size=12", "JetBrainsMono Nerd Font Mono:style:medium:size=12" };
+static const char *fonts[]          = { /*font,*/ "Liberation Mono:size=10,5:antialias=true:autohint=true", "FontAwesome:style=Regular:pixelsize=15", "Iosevka:style=Medium:size=12", "JetBrainsMono Nerd Font Mono:style:medium:size=12" };
 static char normbgcolor[]           = "#222222";
 static char normbordercolor[]       = "#444444";
 static char normfgcolor[]           = "#bbbbbb";
@@ -47,15 +47,7 @@ static char *colors[][3] = {
 };
 
 static const char *const autostart[] = {
-	"nm-applet", NULL,
-//	"slbar",    NULL,
-	"slstatus",  NULL,
-  	"picom",  "-b", NULL,
-//	"sh", "/home/toni/.conky/awesome-conky/launch.sh", NULL,
-	"nitrogen", "--set-scaled", "/home/toni/Immagini/005.png", NULL,
-  	"sh", "-c", "xset r rate 270 45 &", NULL,
-//	"dwmblocks", NULL,
-	"/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1" , NULL,
+	"bash", "/home/toni/.config/dwm/autostart.sh", NULL,
 	NULL /* terminate */
 };
 
@@ -162,7 +154,7 @@ static const Key keys[] = {
   	{ MODKEY|ControlMask,           XK_k,       	movestack,      {.i = -1 } },
 	{ MODKEY,                       XK_z, 		zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    	view,           {0} },
-	{ Mod1Mask,                     XK_Tab,         spawn,          SHCMD("rofi -show window -show-icons -config ~/.local/src/rofi/config.rasi") },
+	{ Mod1Mask,                     XK_Tab,         spawn,          SHCMD("skippy-xd-runner --switch-prev")/*SHCMD("rofi -show window -show-icons -config ~/.local/src/rofi/config.rasi")*/ },
 	{ MODKEY,             		XK_q,      	killclient,     {0} },
 	{ MODKEY,                       XK_t,      	setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      	setlayout,      {.v = &layouts[1]} },
@@ -185,6 +177,7 @@ static const Key keys[] = {
 /*	{ MODKEY|ShiftMask,           	XK_q,      	exitdwm,	{0}	},*/
 	{ MODKEY|ShiftMask,             XK_q,      	spawn,          SHCMD("sysact") },
 	{ MODKEY|ShiftMask,             XK_t,           spawn,          SHCMD("dmenu-translate") },
+	{ MODKEY|ControlMask,           XK_s,           spawn,         	SHCMD("slock") },
 	{ MODKEY|ShiftMask,             XK_r,      	quit,           {1} }, // it will self restart
 	{ MODKEY,                       XK_x,   	viewtoleft,     {0} },
         { MODKEY,                       XK_v,  		viewtoright,    {0} },
