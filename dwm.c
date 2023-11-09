@@ -2482,10 +2482,10 @@ setup(void)
 
 	signal(SIGHUP, sighup);
 	signal(SIGTERM, sigterm);
-	putenv("_JAVA_AWT_WM_NONREPARENTING=1");
-	putenv("XDG_SESSION_TYPE=x11");
-	putenv("XDG_SESSION_DESKTOP=dwm");
-	putenv("XDG_CURRENT_DESKTOP=dwm");
+
+	 for (int i=0; i<LENGTH(env); ++i)
+               putenv(env[i]);
+
 	/* init screen */
 	screen = DefaultScreen(dpy);
 	sw = DisplayWidth(dpy, screen);

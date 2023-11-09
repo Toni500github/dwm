@@ -1,0 +1,33 @@
+this is my personal patch, created by Toni500reddit and posted on r/suckless
+is not much, but it's honest work
+
+diff --git a/config.def.h b/config.def.h
+index 9efa774..92a5ada 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -21,6 +21,11 @@ static const char *colors[][3]      = {
+ /* tagging */
+ static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+ 
++static const char *env[] = {
++	"_JAVA_AWT_WM_NONREPARENTING=1",
++	"XDG_CURRENT_DESKTOP=dwm" /* if using xdg-desktop-portal */
++};
++
+ static const Rule rules[] = {
+ 	/* xprop(1):
+ 	 *	WM_CLASS(STRING) = instance, class
+diff --git a/dwm.c b/dwm.c
+index f1d86b2..c8e0502 100644
+--- a/dwm.c
++++ b/dwm.c
+@@ -1553,6 +1553,9 @@ setup(void)
+ 	/* clean up any zombies (inherited from .xinitrc etc) immediately */
+ 	while (waitpid(-1, NULL, WNOHANG) > 0);
+ 
++	for (int i=0; i<LENGTH(env); ++i)
++		putenv(env[i]);
++
+ 	/* init screen */
+ 	screen = DefaultScreen(dpy);
+ 	sw = DisplayWidth(dpy, screen);

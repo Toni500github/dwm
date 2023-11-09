@@ -24,10 +24,10 @@ static const Bool viewontag         = True;     /* Switch view on tag switch */
 static const char buttonbar[]       = " |";
 #define ICONSIZE 16
 #define ICONSPACING 5
-static const char font[]          	= "Noto Mono:style=Regular:size=10";
-static const char dmenufont[]       = "Noto Mono:style=Regular:size=10";
+static const char font[]          	= "monospace:size=10"; //"Noto Mono:style=Regular:size=10";
+static const char dmenufont[]       = "JetBrains Mono:size=10";
 //static const char *fonts[]	        = { "MesloLGS Nerd Font:size=11" };
-static const char *fonts[]          = { /*font,*/ "Liberation Mono:size=10,5:antialias=true:autohint=true", "FontAwesome:style=Regular:pixelsize=15", "Iosevka:style=Medium:size=12", "JetBrainsMono Nerd Font Mono:style:medium:size=12" };
+static const char *fonts[]          = { /*font,*/ "Liberation Mono:size=10,5:antialias=true:autohint=true", "FontAwesome:style=Regular:pixelsize=15", "Iosevka:style=Medium:size=12", "JetBrainsMono Nerd Font:style:medium:size=12" };
 static char normbgcolor[]           = "#222222";
 static char normbordercolor[]       = "#444444";
 static char normfgcolor[]           = "#bbbbbb";
@@ -58,6 +58,13 @@ static const unsigned int ulinepad	= 5;	/* horizontal padding between the underl
 static const unsigned int ulinestroke	= 2;	/* thickness / height of the underline */
 static const unsigned int ulinevoffset	= 1;	/* how far above the bottom of the bar the line should appear */
 static const int ulineall 		= 0;	/* 1 to show underline on all tags, 0 for just the active ones */
+
+static const char *env[] = {
+	"_JAVA_AWT_WM_NONREPARENTING=1",
+	"XDG_SESSION_TYPE=x11",
+	"XDG_SESSION_DESKTOP=dwm",
+	"XDG_CURRENT_DESKTOP=dwm" /* if using xdg-desktop-portal */
+};
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -112,7 +119,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run_history", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
+static const char *dmenucmd[] = { "dmenu_run_history", "-m", dmenumon, /*"-fn", dmenufont,*/ "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
 static const char *termcmd[]  = { "tabbed", "-r", "2", "st", "-w", "''", NULL };
 
 /* per tag commands for tagspawn function */
