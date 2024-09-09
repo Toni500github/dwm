@@ -78,7 +78,6 @@ static const Rule rules[] = {
 	{ "St",                NULL,     NULL,                        0,         0,          1,           0,        -1 },
   	{ "steam",             NULL,  	 NULL,                        0,         1,          0,           1,        -1 },
 	{ NULL,                NULL,     "Event Tester",              0,         0,          0,           1,        -1 }, /* xev */
-	RULE(.class = "Audacious", .iscentered = 0)
 };
 
 /* layout(s) */
@@ -161,7 +160,7 @@ static const Key keys[] = {
   	{ MODKEY|ControlMask,           XK_k,       	movestack,      {.i = -1 } },
 	{ MODKEY,                       XK_z, 		zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    	view,           {0} },
-	{ Mod1Mask,                     XK_Tab,         spawn,          SHCMD("skippy-xd-runner --switch-prev")/*SHCMD("rofi -show window -show-icons -config ~/.local/src/rofi/config.rasi")*/ },
+	{ Mod1Mask,                     XK_Tab,         spawn,          /*SHCMD("skippy-xd-runner --switch-prev")*/SHCMD("rofi -show window -show-icons -config ~/.local/src/rofi/config.rasi") },
 	{ MODKEY,             		XK_q,      	killclient,     {0} },
 	{ MODKEY,                       XK_t,      	setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      	setlayout,      {.v = &layouts[1]} },
