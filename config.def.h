@@ -87,9 +87,10 @@ static int resizehints = 0;    /* 1 means respect size hints in tiled resizals *
 static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
 
 static const Layout layouts[] = {
+	/* first entry is default */
 	/* symbol     arrange function */
-	{ "[]=",      tile },    /* first entry is default */
-	{ " ",       NULL },    /* no layout function means floating behavior */
+        { " ",       NULL },    /* no layout function means floating behavior */
+	{ "[]=",      tile },
 	{ " ",       monocle },
 	{ "|M|",      centeredmaster },
         { ">M>",      centeredfloatingmaster },
@@ -162,8 +163,8 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_Tab,    	view,           {0} },
 	{ Mod1Mask,                     XK_Tab,         spawn,          /*SHCMD("skippy-xd-runner --switch-prev")*/SHCMD("rofi -show window -show-icons -config ~/.local/src/rofi/config.rasi") },
 	{ MODKEY,             		XK_q,      	killclient,     {0} },
-	{ MODKEY,                       XK_t,      	setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_f,      	setlayout,      {.v = &layouts[1]} },
+	{ MODKEY,                       XK_f,      	setlayout,      {.v = &layouts[0]} },
+	{ MODKEY,                       XK_t,      	setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      	setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_u,      	setlayout,      {.v = &layouts[3]} },
         { MODKEY,                       XK_o,      	setlayout,      {.v = &layouts[4]} },
